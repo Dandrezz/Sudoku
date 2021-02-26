@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./MatrixScreen.css";
+import Swal from 'sweetalert2'
 
 function MatrixScreen() {
 
@@ -20,6 +21,7 @@ function MatrixScreen() {
     const llenarMatrix = () => {
         let matrixB = [], matrixC = [];
         let matrix = [...matrixA];
+        let diff = false;
         for (let i = 0; i < 9; i++) {
             matrixB[i] = new Array(9).fill(0);
             matrixC[i] = new Array(9).fill(0);
@@ -49,9 +51,31 @@ function MatrixScreen() {
                         matrix[i][j] = tmp[0];
                         matrixB[j][i] = tmp[0];
                         matrixC[Math.floor(i / 3) * 3 + Math.floor(j / 3)][(i % 3) * 3 + j % 3] = tmp[0];
+                        diff = true;
                     }
                     tmp = [];
                 }
+            }
+        }
+        if (!diff) {
+            let sudokuSinTerminar = false;
+            matrixA.forEach(element => {
+                if (element.includes(0)) {
+                    sudokuSinTerminar = true;
+                }
+            });
+            if (sudokuSinTerminar) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Sudoku no se puede resolver!',
+                })
+            } else {
+                Swal.fire(
+                    'Good job!',
+                    'Sudoku completo!',
+                    'success'
+                )
             }
         }
         setMatrixRes([...matrix]);
@@ -65,12 +89,13 @@ function MatrixScreen() {
         setMatrixRes(matrixIncial);
     }
 
-    const handleInputChange = ({target},x,y) => {
+    const handleInputChange = ({ target }, x, y) => {
         const re = /^[0-9]$/;
         const valor = target.value;
-        if (valor.match(re) || valor==="") {
+        if (valor.match(re) || valor === "") {
             let matrix = [...matrixA];
-            matrixA[x][y] = target.value;
+
+            matrixA[x][y] = target.value === "" ? 0 : parseInt(target.value);
             setMatrixRes([...matrix])
         }
     }
@@ -91,13 +116,13 @@ function MatrixScreen() {
                                         1
                                         ? `light`
                                         : `dark`
-                                    }`}
+                                        }`}
                                     key={indexCol}
                                 >
-                                    <input 
+                                    <input
                                         value={col !== 0 ? col : ""}
                                         name={`${indexRow}${indexCol}`}
-                                        onChange={(e)=>{handleInputChange(e,indexRow,indexCol)}}
+                                        onChange={(e) => { handleInputChange(e, indexRow, indexCol) }}
                                     />
                                 </th>
                             ))}
