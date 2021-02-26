@@ -3,7 +3,7 @@ import "./App.css";
 
 function App() {
 
-  const [matrixA, setMatrixRes] = useState([
+  const matrixIncial = [
     [0, 0, 3, 0, 4, 0, 0, 6, 7],
     [0, 0, 4, 0, 0, 8, 2, 0, 0],
     [0, 9, 6, 0, 0, 0, 3, 8, 0],
@@ -13,7 +13,9 @@ function App() {
     [0, 0, 0, 0, 0, 4, 0, 0, 0],
     [4, 3, 2, 0, 7, 0, 0, 0, 0],
     [0, 8, 0, 0, 2, 0, 5, 4, 0], 
-  ])
+  ]
+
+  const [matrixA, setMatrixRes] = useState(matrixIncial);
   
   const llenarMatrix = () => {
     let matrixB = [], matrixC = [];
@@ -59,6 +61,10 @@ function App() {
     llenarMatrix()
   }
 
+  const limpiarSudoku = () => {
+    setMatrixRes(matrixIncial);
+  }
+
   return (
     <div className="App top-3">
       <h1 className="center">Sudoku</h1>
@@ -90,6 +96,10 @@ function App() {
         className="centrar-btn top-3"
         onClick={()=>(resolverMatrix())}
       >Llenar Sudoku</button>
+      <button
+        className="centrar-btn top-3"
+        onClick={()=>(limpiarSudoku())}
+      >Limpiar Sudoku</button>
     </div>
   );
 }
